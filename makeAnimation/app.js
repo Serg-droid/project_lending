@@ -3,15 +3,11 @@ const   buttonStart = document.querySelector('.click-to-see'),
         btnReset = document.querySelector('.reset');
 
 let     animationID,
-        width = 20,
-        stopCancel = -1;
+        width = 15,
+        animate = true;
 
 function showAnimation() {
     animationID = requestAnimationFrame(showAnimation);
-    if (stopCancel < 0) {
-        btnAnimated.style['background-color'] = 'green';
-        return;
-    }
     if (width > 250) {
         cancelAnimationFrame(animationID);
         return;
@@ -21,11 +17,18 @@ function showAnimation() {
     btnAnimated.style['background-color'] = 'red';
 }
 
-buttonStart.addEventListener('click', showAnimation);
-
-buttonStart.addEventListener('click', () => stopCancel *= -1);
+buttonStart.addEventListener('click', function() {
+    if (animate) {
+        animationID = requestAnimationFrame(showAnimation);
+        animate = false;
+    }else{
+        cancelAnimationFrame(animationID);
+        animate = true;
+    }
+});
 
 btnReset.addEventListener('click', () => {
+    animate = true;
     btnAnimated.style.width = '15px';
     btnAnimated.style['background-color'] = 'white';
 });
