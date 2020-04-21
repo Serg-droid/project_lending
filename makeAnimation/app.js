@@ -19,7 +19,7 @@ function showAnimation() {
 
 buttonStart.addEventListener('click', function() {
     if (animate) {
-        animationID = requestAnimationFrame(showAnimation);
+        requestAnimationFrame(showAnimation);
         animate = false;
     }else{
         cancelAnimationFrame(animationID);
@@ -29,6 +29,8 @@ buttonStart.addEventListener('click', function() {
 
 btnReset.addEventListener('click', () => {
     animate = true;
+    width = 15;
     btnAnimated.style.width = '15px';
     btnAnimated.style['background-color'] = 'white';
+    cancelAnimationFrame(animationID);
 });
