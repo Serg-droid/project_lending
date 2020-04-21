@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const   btnMenu = document.querySelector('.menu'),
                 menu = document.querySelector('menu'),
                 closeBtn = document.querySelector('.close-btn'),
-                menuItems = menu.querySelectorAll('ul>li');
+                menuItems = menu.querySelectorAll('ul>li>a');
 
         const menuHandler = () => {
             if(!menu.style.transform || menu.style.transform === 'translateX(-100%)') {
