@@ -155,4 +155,73 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     tabs();
+
+    //добавляем "точки" переключения слайдов в слайдере
+    function addDots() {
+        const   portfolioItems = document.querySelectorAll('.portfolio-item'),
+                dotList = document.querySelector('.portfolio-dots'),
+                portfolioLength = portfolioItems.length,
+                fragment = document.createDocumentFragment();
+        
+        for(let i = 0; i < portfolioLength; i++) {
+            const li = document.createElement('li');
+            li.classList.add('dot');
+            if(i === 0) {
+                li.classList.add('dot-active');
+            }
+            fragment.append(li);
+        }  
+        
+        dotList.append(fragment);
+    }
+    addDots();
+
+    //slider
+    function slider() {
+        const   portfolio = document.querySelector('.portfolio'),
+                btnPrev = portfolio.querySelector('#arrow-left'),
+                btnNext = portfolio.querySelector('#arrow-right'),
+                allDots = portfolio.querySelectorAll('.dot'),
+                portfolioItems = portfolio.querySelectorAll('.portfolio-item'),
+                arrOfDots = Array.from(allDots),
+                [...arrOfPortfolioItems] = portfolioItems;
+
+        function changeImages(dot, indexOfDot) {  
+            arrOfPortfolioItems.forEach((elem) => {
+                elem.classList.remove('portfolio-item-active');
+            });
+            arrOfDots.forEach((elem) => {
+                elem.classList.remove('dot-active');
+            });
+
+            dot.classList.add('dot-active');
+            arrOfPortfolioItems[indexOfDot].classList.add('portfolio-item-active');
+        }
+        
+        portfolio.addEventListener('click', (e) => {
+            if(!(e.target.className === 'dot' || e.target === btnPrev || e.target === btnNext)) {
+                return;
+            }
+            e.preventDefault();
+            const  activeDot = portfolio.querySelector('.dot-active');
+
+            if(e.target.className === 'dot') {
+                const indexOfDot = arrOfDots.indexOf(e.target);
+
+                changeImages(e.target, indexOfDot);
+            }else if(e.target === btnPrev) {
+                // Проверка на выход за границы массива точек
+                const indexOfPrevDot = arrOfDots.indexOf(activeDot) - 1 < 0 ? arrOfDots.length - 1 : arrOfDots.indexOf(activeDot) - 1;
+
+                changeImages(arrOfDots[indexOfPrevDot], indexOfPrevDot);
+            }else{
+                // -\\-
+                const indexOfNextDot = arrOfDots.indexOf(activeDot) + 1 > arrOfDots.length - 1 ? 0 : arrOfDots.indexOf(activeDot) + 1;
+
+                changeImages(arrOfDots[indexOfNextDot], indexOfNextDot);
+            }
+        });
+
+    }
+    slider();
 });
