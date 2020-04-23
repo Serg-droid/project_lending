@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const   btnMenu = document.querySelector('.menu'),
                 menu = document.querySelector('menu'),
                 closeBtn = document.querySelector('.close-btn'),
-                menuItems = menu.querySelectorAll('ul>li>a');
+                menuItems = menu.querySelectorAll('ul>li>a'),
+                body = document.querySelector('body');
 
         const menuHandler = () => {
             if(!menu.style.transform || menu.style.transform === 'translateX(-100%)') {
@@ -48,13 +49,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 menu.style.transform = 'translateX(-100%)';
             }
         };
-
-        btnMenu.addEventListener('click', menuHandler);
-        closeBtn.addEventListener('click', menuHandler);
-        menuItems.forEach((elem) => {
-            elem.addEventListener('click', menuHandler);
+        
+        body.addEventListener('click', (e) => {
+            const target = e.target.closest('.menu') || e.target.closest('menu');
+            if(!target) {
+                return;
+            }
+            if (target.classList.value === 'menu' || Array.from(target.querySelectorAll('a')).includes(e.target)) {
+                menuHandler();
+                return;
+            }
         });
-
     }
     showMenu();
 
@@ -121,4 +126,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     scrollingPage();
+
+    //tabs 
+    function tabs() {
+        const   serviceHeader = document.querySelector('.service-header'),
+                serviceTabs = document.querySelectorAll('.service-tab'),
+                serviceHeaderBtn = document.querySelectorAll('.service-header-tab');
+
+        serviceHeader.addEventListener('click', (e) => {
+            let target = e.target.closest('.service-header-tab');
+            if(target.classList.contains('active')) {
+                return;
+            }
+            
+            const indexServiceTab = Array.from(serviceHeaderBtn).indexOf(target);
+            
+            serviceHeaderBtn.forEach((elem) => {
+                elem.classList.remove('active');
+            });
+            target.classList.add('active');
+            
+            serviceTabs[indexServiceTab].classList.remove('d-none');
+            serviceTabs.forEach((item, index) => {
+                if(index !== indexServiceTab && !item.classList.contains('d-none')) {
+                    item.classList.add('d-none');
+                }
+            });
+        });
+    }
+    tabs();
 });
