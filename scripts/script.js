@@ -258,4 +258,61 @@ document.addEventListener('DOMContentLoaded', function() {
         autoChangingStart(2000);
     }
     slider();
+
+    //валидация инпутов калькулятора
+    function validateCalcInputs() {
+        const   calcBlock = document.querySelector('.calc-block'),
+                calcSquare = calcBlock.querySelector('.calc-square'),
+                calcCount = calcBlock.querySelector('.calc-count'),
+                calcDay = calcBlock.querySelector('.calc-day');
+        let     previousElemValue;
+
+
+        const inputCalcHandler = (elem) => {
+            const   hiddenInputValue = elem.value.match(/^[0-9]*$/).input,
+                    lastInputPos = elem.value.length;
+        
+            if(hiddenInputValue === '') {
+                elem.value = previousElemValue;
+            }else{
+                previousElemValue = elem.value;
+            }
+        };
+
+        calcSquare.addEventListener('input', () => {
+            inputCalcHandler(calcSquare);
+        });
+
+        calcCount.addEventListener('input', () => {
+            inputCalcHandler(calcCount);
+        });
+
+        calcDay.addEventListener('input', () => {
+            inputCalcHandler(calcDay);
+        })
+
+    }
+    validateCalcInputs();
+
+    //при клике на фото команды меняет картинку
+    function showOurCommandImg() {
+        const   command = document.getElementById('command');
+
+        command.addEventListener('click', (e) => {
+            const target = e.target;
+            if(target.tagName !== "IMG") {
+                return;
+            }
+            const previousPhotoSrc = target.getAttribute('src');
+            target.setAttribute('src', target.dataset.img);
+
+            target.addEventListener('mouseout', () => {
+                target.setAttribute('src', previousPhotoSrc);
+            });
+        });
+    }
+    showOurCommandImg();
+
+
+
 });
