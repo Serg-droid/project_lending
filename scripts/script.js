@@ -261,36 +261,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //валидация инпутов калькулятора
     function validateCalcInputs() {
-        const   calcBlock = document.querySelector('.calc-block'),
-                calcSquare = calcBlock.querySelector('.calc-square'),
-                calcCount = calcBlock.querySelector('.calc-count'),
-                calcDay = calcBlock.querySelector('.calc-day');
-        let     previousElemValue;
-
+        const   calcBlock = document.querySelector('.calc-block');
+        let     previousElemValue = '';
 
         const inputCalcHandler = (elem) => {
-            const   hiddenInputValue = elem.value.match(/^[0-9]*$/).input,
-                    lastInputPos = elem.value.length;
-        
-            if(hiddenInputValue === '') {
+            const   hiddenInputValue = elem.value.match(/^[0-9]*$/).input;
+            
+            if(!hiddenInputValue && !elem.value.length && previousElemValue.length === 1) {
+                previousElemValue = '';
                 elem.value = previousElemValue;
-            }else{
+            }else if(hiddenInputValue) {
                 previousElemValue = elem.value;
+            }else if(!hiddenInputValue) {
+                elem.value = previousElemValue;
             }
         };
 
-        calcSquare.addEventListener('input', () => {
-            inputCalcHandler(calcSquare);
+        calcBlock.addEventListener('input', (e) => {
+            const target = e.target;
+            if(!target.matches('.calc-square, .calc-count, .calc-day')) {
+                return;
+            }
+            inputCalcHandler(target);
         });
 
-        calcCount.addEventListener('input', () => {
-            inputCalcHandler(calcCount);
+        calcBlock.addEventListener('click', (e) => {
+            const target = e.target;
+            if(!target.matches('.calc-square, .calc-count, .calc-day')) {
+                return;
+            }
+            previousElemValue = '';
         });
-
-        calcDay.addEventListener('input', () => {
-            inputCalcHandler(calcDay);
-        })
-
     }
     validateCalcInputs();
 
@@ -312,7 +313,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     showOurCommandImg();
-
-
 
 });
