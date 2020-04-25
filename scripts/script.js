@@ -262,35 +262,18 @@ document.addEventListener('DOMContentLoaded', function() {
     //валидация инпутов калькулятора
     function validateCalcInputs() {
         const   calcBlock = document.querySelector('.calc-block');
-        let     previousElemValue = '';
 
         const inputCalcHandler = (elem) => {
-            const   hiddenInputValue = elem.value.match(/^[0-9]*$/).input;
-            
-            if(!hiddenInputValue && !elem.value.length && previousElemValue.length === 1) {
-                previousElemValue = '';
-                elem.value = previousElemValue;
-            }else if(hiddenInputValue) {
-                previousElemValue = elem.value;
-            }else if(!hiddenInputValue) {
-                elem.value = previousElemValue;
-            }
+            console.log(elem.value);
+            elem.value = elem.value.replace(/[^\d]/g, '');
         };
 
-        calcBlock.addEventListener('input', (e) => {
+        calcBlock.addEventListener('keyup', (e) => {
             const target = e.target;
             if(!target.matches('.calc-square, .calc-count, .calc-day')) {
                 return;
             }
             inputCalcHandler(target);
-        });
-
-        calcBlock.addEventListener('click', (e) => {
-            const target = e.target;
-            if(!target.matches('.calc-square, .calc-count, .calc-day')) {
-                return;
-            }
-            previousElemValue = '';
         });
     }
     validateCalcInputs();
