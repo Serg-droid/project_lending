@@ -346,4 +346,134 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     calc(100);
+
+    //json/formData-ajax запрос
+    function makeRequest(method, url, body = '', contentType = 'application/json', callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('readystatechange', () => {
+            callback('load');
+            if(xhr.readyState !== 4){
+                return;
+            }
+            if(xhr.status === 200){
+                callback('get');
+            }else{
+                callback('error');
+            }
+        });
+        xhr.open(method, url);
+        xhr.setRequestHeader('Content-Type', contentType);
+        if(method === 'GET'){
+            xhr.send();
+        }else if(method === 'POST'){
+            xhr.send(body);
+        } 
+    }
+
+    //вешает запросы на формы
+    function setFormRequests() {
+        const allForms = document.querySelectorAll('form');
+        
+        const requestHandler = (form, stateToWrite) => {
+            const state = {
+                load: 'Подождите, пожалуйста, идет загрузка',
+                get: 'Данные отправлены',
+                error: `Произошла ошибка`,
+            }
+            const formLastChild = form.children[form.children.length - 1];
+            if(formLastChild.matches('.load-div, .error-div, .get-div')){
+                formLastChild.remove();
+            }
+            const answerDiv = document.createElement('div');
+            if(stateToWrite === 'load'){
+                answerDiv.classList.add('sk-double-bounce');
+                answerDiv.innerHTML = `
+                <div class='sk-child sk-double-bounce-1'></div>
+                <div class='sk-child sk-double-bounce-2'></div>
+                `;
+            }else{
+                answerDiv.style.cssText = 'font-size: 30px; background-color: #fff; color: #000; display: inline-block';
+                answerDiv.textContent = state[stateToWrite];
+            }
+            answerDiv.classList.add(`${stateToWrite}-div`);
+            form.appendChild(answerDiv);
+            console.log(answerDiv);
+        }
+
+        allForms.forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                makeRequest('POST', '../server.php', formData, 'multipart/form-data', (textToWrite) => requestHandler(form, textToWrite));
+                const formInputs = form.querySelectorAll('input');
+                formInputs.forEach(input => {
+                    input.value = '';
+                });
+            });
+        })
+
+        //добваляем стили для прелоадер-картинки
+        const style = document.createElement('style');
+        style.textContent = `
+        .sk-double-bounce {
+            width: 4em !important;
+            height: 4em !important;
+            position: relative;
+            margin: auto;
+            z-index: 100;
+        }
+          
+        .sk-child {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color:  #337ab7 !important;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: sk-double-bounce 2.0s infinite ease-in-out;
+        }
+          
+        .sk-double-bounce-2 {
+        animation-delay: -1.0s;
+        }
+          
+        @keyframes sk-double-bounce {
+            0%, 100% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.0);
+            }
+        }
+        `;
+        document.head.append(style);
+    }
+    setFormRequests();
+
+    //валидация инпутов форм
+    function validateFormInputs() {
+        const   allForms = document.querySelectorAll('form');
+
+        const setInputValidation = (input) => {
+            input.addEventListener('input', () => {
+                const valueLastIndex = input.value.length - 1;
+                if(input.type === 'tel' && valueLastIndex > -1){
+                    input.value = input.value.slice(0, valueLastIndex) + input.value[valueLastIndex].replace(/[^0-9\+]/, '');
+                }else if((input.matches('.mess') || input.type === 'text') && valueLastIndex > -1){
+                    input.value = input.value.slice(0, valueLastIndex) + input.value[valueLastIndex].replace(/[^а-яё\s]/i, '');
+                }
+            });
+        }
+
+        allForms.forEach(form => {
+            const allInputs = form.querySelectorAll('input');
+            allInputs.forEach(input => {
+                setInputValidation(input);
+            });
+        });
+    }
+    validateFormInputs();
+
 });
