@@ -264,7 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const   calcBlock = document.querySelector('.calc-block');
 
         const inputCalcHandler = (elem) => {
-            console.log(elem.value);
             elem.value = elem.value.replace(/[^\d]/g, '');
         };
 
@@ -298,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showOurCommandImg();
 
     //калькулятор
-    const calc = (price = 100) => {
+    function calc(price = 100){
         const   calcBlock = document.querySelector('.calc-block'),
                 calcType = document.querySelector('.calc-type'),
                 calcSquare = document.querySelector('.calc-square'),
@@ -347,5 +346,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     calc(100);
-
 });

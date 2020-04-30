@@ -418,7 +418,36 @@
 		</div>
 	</div>
 </div>
-
+<script src="plugins/validator/validator.js"></script>
 <script src="scripts/script.js"></script>
+<script>
+	for(let i = 1; i <= 3; i++) {
+		const validator = new Validator({
+			selector: `#form${i}`,
+			pattern: {
+				onlyRussianWords: /[а-яё]{5,}/gi
+			},
+			method: {
+				[`form${i}-phone`]: [
+					['notEmpty'],
+					['pattern', 'phone'],
+				],
+				[`form${i}-email`]: [
+					['notEmpty'],
+					['pattern', 'email'],
+				],
+				[`form${i}-name`]: [
+					['notEmpty'],
+					['pattern', 'onlyRussianWords'],
+				],
+				[`form${i}-message`]: [
+					['notEmpty'],
+					['pattern', 'onlyRussianWords'],
+				],
+			}
+		});
+		validator.init();
+	}
+</script>
 </body>
 </html>
