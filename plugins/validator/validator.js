@@ -79,14 +79,18 @@ class Validator{
         const style = document.createElement('style');
         style.textContent = `
             input.success{
-                border: 2px solid green;
+                border: 2px solid green
+                !important;
             }
             input.error{
-                border: 2px solid red;
+                border: 2px solid red
+                !important;
             }
             .validator-error{
+                position: relative;
                 font-size: 24px;
                 color: red;
+                z-index: 100;
             }
         `;
         document.head.append(style);
