@@ -348,32 +348,33 @@ document.addEventListener('DOMContentLoaded', function() {
     calc(100);
 
     //json/formData-ajax запрос
-    function makeRequest(method, url, body = '', contentType = 'application/json', callback) {
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('readystatechange', () => {
-            callback('load');
-            if(xhr.readyState !== 4){
-                return;
-            }
-            if(xhr.status === 200){
-                callback('get');
-            }else{
-                callback('error');
+    function makeRequest(method, url, body = '', contentType = 'application/json') {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.addEventListener('readystatechange', () => {
+                if(xhr.readyState !== 4){
+                    return;
+                }
+                if(xhr.status === 200){
+                    resolve('get');
+                }else{
+                    reject('error');
+                }
+            });
+            xhr.open(method, url);
+            xhr.setRequestHeader('Content-Type', contentType);
+            if (method === 'GET') {
+                xhr.send();
+            } else if (method === 'POST') {
+                xhr.send(body);
             }
         });
-        xhr.open(method, url);
-        xhr.setRequestHeader('Content-Type', contentType);
-        if(method === 'GET'){
-            xhr.send();
-        }else if(method === 'POST'){
-            xhr.send(body);
-        } 
     }
 
     //вешает запросы на формы
     function setFormRequests() {
         const allForms = document.querySelectorAll('form');
-        
+
         const requestHandler = (form, stateToWrite) => {
             const state = {
                 load: 'Подождите, пожалуйста, идет загрузка',
@@ -381,17 +382,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 error: `Произошла ошибка`,
             }
             const formLastChild = form.children[form.children.length - 1];
-            if(formLastChild.matches('.load-div, .error-div, .get-div')){
+            if (formLastChild.matches('.load-div, .error-div, .get-div')) {
                 formLastChild.remove();
             }
             const answerDiv = document.createElement('div');
-            if(stateToWrite === 'load'){
+            if (stateToWrite === 'load') {
                 answerDiv.classList.add('sk-double-bounce');
                 answerDiv.innerHTML = `
                 <div class='sk-child sk-double-bounce-1'></div>
                 <div class='sk-child sk-double-bounce-2'></div>
                 `;
-            }else{
+            } else {
                 answerDiv.style.cssText = 'font-size: 30px; background-color: #fff; color: #000; display: inline-block';
                 answerDiv.textContent = state[stateToWrite];
             }
@@ -408,7 +409,10 @@ document.addEventListener('DOMContentLoaded', function() {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const formData = new FormData(form);
-                makeRequest('POST', '../server.php', formData, 'multipart/form-data', (textToWrite) => requestHandler(form, textToWrite));
+                requestHandler(form, 'load');
+                makeRequest('POST', '../server.php', formData, 'multipart/form-data')
+                    .then((textToWrite) => requestHandler(form, textToWrite))
+                    .catch((error) => requestHandler(form, error));
                 const formInputs = form.querySelectorAll('input');
                 formInputs.forEach(input => {
                     input.value = '';
