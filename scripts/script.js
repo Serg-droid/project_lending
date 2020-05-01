@@ -397,7 +397,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             answerDiv.classList.add(`${stateToWrite}-div`);
             form.appendChild(answerDiv);
-            console.log(answerDiv);
+            if(stateToWrite === 'get' || stateToWrite === 'error'){
+                setTimeout(() => {
+                    answerDiv.remove();
+                }, 5000);
+            }
         }
 
         allForms.forEach(form => {
