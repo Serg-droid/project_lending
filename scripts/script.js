@@ -351,8 +351,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function makeRequest(method, url, body = '', contentType = 'application/json') {
         return fetch(url, {
             method,
-            contentType,
-            body: JSON.stringify(body),
+            credentials: 'include',
+            headers: {
+                'Content-Type': contentType,
+            },
+            body: JSON.stringify(body)
         })
     }
 
