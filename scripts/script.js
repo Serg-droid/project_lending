@@ -349,26 +349,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //json/formData-ajax запрос
     function makeRequest(method, url, body = '', contentType = 'application/json') {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.addEventListener('readystatechange', () => {
-                if(xhr.readyState !== 4){
-                    return;
-                }
-                if(xhr.status === 200){
-                    resolve('get');
-                }else{
-                    reject('error');
-                }
-            });
-            xhr.open(method, url);
-            xhr.setRequestHeader('Content-Type', contentType);
-            if (method === 'GET') {
-                xhr.send();
-            } else if (method === 'POST') {
-                xhr.send(body);
-            }
-        });
+        return fetch(url, {
+            method,
+            contentType,
+            body: JSON.stringify(body),
+        })
     }
 
     //вешает запросы на формы
@@ -398,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             answerDiv.classList.add(`${stateToWrite}-div`);
             form.appendChild(answerDiv);
-            if(stateToWrite === 'get' || stateToWrite === 'error'){
+            if (stateToWrite === 'get' || stateToWrite === 'error') {
                 setTimeout(() => {
                     answerDiv.remove();
                 }, 5000);
@@ -411,8 +396,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formData = new FormData(form);
                 requestHandler(form, 'load');
                 makeRequest('POST', '../server.php', formData, 'multipart/form-data')
-                    .then((textToWrite) => requestHandler(form, textToWrite))
-                    .catch((error) => requestHandler(form, error));
+                .then((response) => {
+                    if(response.status !== 200){
+                        throw new Error('response status not 200');
+                    }
+                    requestHandler(form, 'get');
+                })
+                    .catch((error) => requestHandler(form, 'error'));
                 const formInputs = form.querySelectorAll('input');
                 formInputs.forEach(input => {
                     input.value = '';
