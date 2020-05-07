@@ -38,7 +38,9 @@ function setFormRequests() {
             e.preventDefault();
             const formData = new FormData(form);
             requestHandler(form, 'load');
-            makeRequest('../server.php', 'POST', formData, 'multipart/form-data')
+            const dataObj = {}; 
+            formData.forEach((value, key) => dataObj[key] = value);
+            makeRequest('../server.php', 'POST', JSON.stringify(dataObj))
                 .then((response) => {
                     if(response.status !== 200){
                         throw new Error('response status not 200');

@@ -1,7 +1,7 @@
 function showOurCommandImg() {
     const   command = document.getElementById('command');
 
-    command.addEventListener('click', (e) => {
+    command.addEventListener('mouseover', (e) => {
         const target = e.target;
         if(target.tagName !== "IMG") {
             return;

@@ -26,6 +26,7 @@ function calc(price = 100){
 
         if(typeValue && squareValue) {
             total = price * typeValue * squareValue * countValue * dayValue;
+            total = Math.round(total);
         }
 
         const timeoutID = setInterval(function() {
@@ -36,7 +37,7 @@ function calc(price = 100){
                 totalValue.textContent = Math.floor(Math.random() * total);
                 timeoutCounter -= 1;
             }
-        }, 30)
+        }, 30);
     };
 
     calcBlock.addEventListener('change', (e) => {
