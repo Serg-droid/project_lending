@@ -348,15 +348,14 @@ document.addEventListener('DOMContentLoaded', function() {
     calc(100);
 
     //json/formData-ajax запрос
-    function makeRequest(method, url, body = '', contentType = 'application/json') {
+    function makeRequest(url, method = 'GET', body = '', contentType = 'application/json') {
         return fetch(url, {
             method,
-            credentials: 'include',
             headers: {
                 'Content-Type': contentType,
             },
-            body: JSON.stringify(body)
-        })
+            body,
+        });
     }
 
     //вешает запросы на формы
@@ -398,13 +397,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 const formData = new FormData(form);
                 requestHandler(form, 'load');
-                makeRequest('POST', '../server.php', formData, 'multipart/form-data')
-                .then((response) => {
-                    if(response.status !== 200){
-                        throw new Error('response status not 200');
-                    }
-                    requestHandler(form, 'get');
-                })
+                makeRequest('../server.php', 'POST', formData, 'multipart/form-data')
+                    .then((response) => {
+                        if(response.status !== 200){
+                            throw new Error('response status not 200');
+                        }
+                        requestHandler(form, 'get');
+                    })
                     .catch((error) => requestHandler(form, 'error'));
                 const formInputs = form.querySelectorAll('input');
                 formInputs.forEach(input => {
