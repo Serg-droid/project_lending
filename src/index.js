@@ -19,6 +19,31 @@ import calc from './modules/calc';
 import setFormRequests from './modules/setFormRequests';
 import validateFormInputs from './modules/validateFormInputs';
 
+//полифил для append
+(function (arr) {
+    arr.forEach(function (item) {
+      if (item.hasOwnProperty('append')) {
+        return;
+      }
+      Object.defineProperty(item, 'append', {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: function append() {
+          var argArr = Array.prototype.slice.call(arguments),
+            docFrag = document.createDocumentFragment();
+          
+          argArr.forEach(function (argItem) {
+            var isNode = argItem instanceof Node;
+            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+          });
+          
+          this.appendChild(docFrag);
+        }
+      });
+    });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
     //таймер на сайте
