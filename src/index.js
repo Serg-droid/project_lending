@@ -47,7 +47,7 @@ import validateFormInputs from './modules/validateFormInputs';
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
     //таймер на сайте
-    makeTimer('22 april 2020');
+    makeTimer('6 may 2020');
     //меню
     showMenu();
     //popup

@@ -3,10 +3,11 @@ function showMenu() {
             body = document.querySelector('body');
 
     let menuShowed = false;
+    menu.style.transition = 'all 0.5s';
 
     const menuHandler = () => {
         if(!menuShowed) {
-            menu.style.transform = 'translateX(0)';
+            menu.style.transform = 'translateX(100%)';
             menuShowed = !menuShowed;
         }else{
             menu.style.transform = 'translateX(-100%)';

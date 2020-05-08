@@ -1,18 +1,18 @@
+import animateCalc from "./animateCalc";
+
 function calc(price = 100){
     const   calcBlock = document.querySelector('.calc-block'),
             calcType = document.querySelector('.calc-type'),
             calcSquare = document.querySelector('.calc-square'),
             calcDay = document.querySelector('.calc-day'),
-            calcCount = document.querySelector('.calc-count'),
-            totalValue = document.getElementById('total');
+            calcCount = document.querySelector('.calc-count');
 
     const countSum = () => {
         let total = 0,
             countValue = 1,
             dayValue = 1,
             typeValue = calcType.options[calcType.selectedIndex].value,
-            squareValue = +calcSquare.value,
-            timeoutCounter = 25;
+            squareValue = +calcSquare.value;
 
         if(calcCount.value > 1) {
             countValue += (calcCount.value - 1) / 10;
@@ -29,20 +29,12 @@ function calc(price = 100){
             total = Math.round(total);
         }
 
-        const timeoutID = setInterval(function() {
-            if(timeoutCounter === 0) {
-                totalValue.textContent = total;
-                clearInterval(timeoutID);
-            }else{
-                totalValue.textContent = Math.floor(Math.random() * total);
-                timeoutCounter -= 1;
-            }
-        }, 30);
+        animateCalc(total);
     };
 
     calcBlock.addEventListener('change', (e) => {
         const target = e.target;
-        if(target.matches('select') || target.matches('input')) {
+        if(target.matches('input')) {
             countSum();
         }
     });

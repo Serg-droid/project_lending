@@ -57,13 +57,13 @@ function slider() {
     });
 
     portfolio.addEventListener('mouseover', (e) => {
-        if(e.target.matches('.portfolio-btn')) {
+        if(e.target.matches('.portfolio-btn, .dot')) {
             autoChangingStop();
         }
     });
 
     portfolio.addEventListener('mouseout', (e) => {
-        if(e.target.matches('.portfolio-btn')) {
+        if(e.target.matches('.portfolio-btn, .dot')) {
             autoChangingStart(2000);
         }
     });

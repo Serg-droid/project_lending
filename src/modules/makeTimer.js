@@ -17,7 +17,8 @@ function makeTimer(deadline) {
             timerHours.textContent = '00';
             timerMinutes.textContent = '00';
             timerSeconds.textContent = '00';
-            endTime = endTime + (24 * 3600 * 1000);
+            const distDay = new Date(startTime - endTime).getDate();
+            endTime = endTime + (24 * 3600 * 1000) * (distDay - 1);
             return;
         }
 
