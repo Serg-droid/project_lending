@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         Цена: ${price}$`;
                     }
                 });
+                select.value = 'no';
             })
             .catch(errorText => {
                 output.innerHTML = errorText;
