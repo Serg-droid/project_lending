@@ -14,11 +14,8 @@ function makeTimer(deadline) {
                 hours = String(Math.floor(periodTime / 1000 / 3600));
         
         if (periodTime < 0) {
-            timerHours.textContent = '00';
-            timerMinutes.textContent = '00';
-            timerSeconds.textContent = '00';
             const distDay = new Date(startTime - endTime).getDate();
-            endTime = endTime + (24 * 3600 * 1000) * (distDay - 1);
+            endTime = endTime + distDay * (24 * 1000 * 3600);
             return;
         }
 

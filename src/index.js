@@ -6,6 +6,8 @@ import 'fetch-polyfill';
 import 'es6-promise/auto';
 import 'formdata-polyfill';
 import './modules/append-polyfill';
+import smoothscroll from 'smoothscroll-polyfill';
+smoothscroll.polyfill();
 
 import makeTimer from './modules/makeTimer';
 import showMenu from './modules/showMenu';
@@ -23,7 +25,7 @@ import validateFormInputs from './modules/validateFormInputs';
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
     //таймер на сайте
-    makeTimer('6 may 2020');
+    makeTimer('5 may 2020');
     //меню
     showMenu();
     //popup
