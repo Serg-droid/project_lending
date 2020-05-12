@@ -36,6 +36,8 @@ function calc(price = 100){
         const target = e.target;
         if(target.matches('input')) {
             countSum();
+        }else if((calcSquare.value || calcDay.value || calcCount.value) && target.matches('select')){
+            countSum();
         }
     });
 }

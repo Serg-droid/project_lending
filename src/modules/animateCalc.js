@@ -1,31 +1,20 @@
 const animateCalc = (total) => {
-    let valueToBeEqual = 0;
-    let speed = 3;
     const totalValue = document.getElementById('total');
 
-    if(total > 5000){
-        speed = 7;
-    }else if(total > 2000){
-        speed = 6;
-    }else if(total > 1000){
-        speed = 5;
-    }else{
-        speed = 2;
-    }
+    let count = 1;
+    const idInterval = setInterval(() => {
+        const step = total / 37.5;
+        totalValue.textContent = count;
 
-    const intervalID = setInterval(() => {
-        if(valueToBeEqual === total){
-            totalValue.textContent = total;
-            clearInterval(intervalID);
+        if (count < total) {
+            count += step;
+            totalValue.textContent = Math.floor(count);
+        } else {
+            clearInterval(idInterval);
+            count = total;
+            totalValue.textContent = count;
         }
-        if(valueToBeEqual + speed < total){
-            totalValue.textContent = valueToBeEqual;
-            valueToBeEqual += speed;
-        }else{
-            valueToBeEqual = total;
-        }
-
-    }, 1);
+    });
 };
 
 export default animateCalc;
